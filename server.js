@@ -18,15 +18,22 @@ io.on("connection", (socket) => {// io = whole server , socket = single server
 
   socket.on('disconnect',()=>{
     console.log('A user disconnects');
+  }) 
 
-  socket.io('ai-message',async (data)=>{
-    console.log("Received message: "+data.prompt)
-    const respone = await generateResponse(data.prompt)
-    console.log("AI response: "+respone);
-    
-  })  
-    
+  // socket.on('ai-message',async (data)=>{
+  //   console.log("Received message: ",data.prompt)
+  //   const respone = await generateResponse(data.prompt)
+  //   console.log("AI response: ",respone);
+  //   socket.emit("ai-message-reponse",{respone})
+  // })  
+
+  socket.on('ai-message',async(data)=>{
+    console.log('Recieved message:',data)
+    const res = await generateResponse(data)
+    console.log('AI res:',res)
+    socket.emit('ai-message-reponse',res)
   })
+    
 
   socket.on('kaveri',(data)=>{
     console.log('A user exists');
@@ -38,3 +45,11 @@ io.on("connection", (socket) => {// io = whole server , socket = single server
 });
 
 httpServer.listen(3000);
+
+
+
+// io - server 
+// socket - single user 
+// on - listen to an event
+// emit - send an event
+// socket io provides event driven communication
